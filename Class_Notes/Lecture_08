@@ -1,0 +1,195 @@
+# Labels
+-   they are "key-value pairs" attached to objects.
+-   '''yaml
+    metadata:
+        labels:
+            app: frontend
+            env: production
+            tier: web
+    '''
+
+# Selectors
+-   Used to find obejcts with specific labels.
+-   '''yaml
+    selector:
+        matchLabels:
+            app: frontend
+            env: production
+    '''
+
+# Commond Examples:
+'''bash
+
+# Get pods with specific label
+-   kubectl get pods -l app=nginx
+
+# Get pods with multiple labels
+-   kubectl get pods -l app=nginx,env=prod
+
+# Get pods with label 'app'
+-   kubectl get pods -l app
+
+
+# Annotations (Metadata)
+-   Non-identifying information (not used for selection).
+-   '''yaml
+    metadata:
+        annotations:
+            owner: "devops-team"
+            contact: "devops@company.com"
+            created-by: "John Doe"
+    '''
+
+# Rolling Back
+'''bash
+
+# Undo last deployment
+-   kubectl rollout undo deployment/nginx-deploy
+
+# Rollback to specific revision 
+-   kubectl rollout undo deployment/nginx-deploy --to-revision=2
+
+
+# Role-Based Access Control (RBAC)
+
+# What is RBAC?
+
+RBAC controls: 
+-   "Who" can do "what" on "which resources".
+
+# RBAC Components:
+
+```
+User → Role → Permissions
+  ↓
+RoleBinding
+```
+
+| Component | Purpose |
+|-----------|---------|
+| **Role** | Defines permissions (what actions) |
+| **RoleBinding** | Links user to role |
+| **ClusterRole** | Cluster-wide permissions |
+| **ClusterRoleBinding** | Cluster-wide user-role link |
+
+---
+
+
+### 🎯 Example: User Can READ Pods ONLY
+
+#### Step 1️⃣ Create Role
+
+Create file: `pod-reader-role.yaml`
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+```
+
+```bash
+kubectl apply -f pod-reader-role.yaml
+```
+
+#### Step 2️⃣ Create RoleBinding
+
+Create file: `pod-reader-binding.yaml`
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-reader-binding
+  namespace: default
+subjects:
+- kind: User
+  name: dev-user
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+```bash
+kubectl apply -f pod-reader-binding.yaml
+```
+
+
+#### Step 3️⃣ Test Permissions
+
+```bash
+# Check if user can list pods (should be YES)
+kubectl auth can-i list pods --as dev-user
+
+# Check if user can delete pods (should be NO)
+kubectl auth can-i delete pods --as dev-user
+
+# Check if user can create deployments (should be NO)
+kubectl auth can-i create deployments --as dev-user
+```
+
+### 📊 Common RBAC Verbs
+
+| Verb | Action |
+|------|--------|
+| `get` | Read single resource |
+| `list` | Read multiple resources |
+| `watch` | Watch for changes |
+| `create` | Create new resource |
+| `update` | Modify existing resource |
+| `delete` | Delete resource |
+| `*` | All actions |
+
+---
+
+## 1️⃣5️⃣ ConfigMaps & Secrets
+
+### 🔹 ConfigMap (Non-Sensitive Configuration)
+
+**Use Case:** Application settings, environment variables, config files
+
+#### Create ConfigMap
+
+```bash
+# From literal values
+kubectl create configmap app-config \
+  --from-literal=APP_ENV=production \
+  --from-literal=LOG_LEVEL=info
+
+# From file
+kubectl create configmap nginx-config \
+  --from-file=nginx.conf
+
+# Verify
+kubectl get configmap
+kubectl describe configmap app-config
+```
+
+### 🔹 Secret (Sensitive Data)
+
+**Use Case:** Passwords, API keys, certificates
+
+#### Create Secret
+
+```bash
+# From literal values
+kubectl create secret generic db-secret \
+  --from-literal=username=admin \
+  --from-literal=password=MyP@ssw0rd
+
+# From file
+kubectl create secret generic tls-secret \
+  --from-file=tls.crt \
+  --from-file=tls.key
+
+# Verify
+kubectl get secrets
+```
+

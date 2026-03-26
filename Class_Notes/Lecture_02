@@ -1,0 +1,87 @@
+Step 1: Install Minikube (Windows)
+
+Step 2: Verify Installation
+
+	minikube version
+	kubectl version --client
+ 
+Step 3: Start Kubernetes Cluster
+
+	minikube start
+
+Step 4: Check Cluster Status
+
+	minikube status
+	kubectl cluster-info
+
+Step 5: Check Nodes
+
+	kubectl get nodes
+
+Step 6: Create Your First Pod
+🔹 Run an Nginx Pod
+		kubectl run mypod --image=nginx
+🔹 Check Pod Status
+		kubectl get pods
+
+Step 7: Describe Pod (Very Useful)
+	kubectl describe pod mypod
+
+Step 8: Delete Pod
+	kubectl delete pod mypod 
+    kubectl delete pods --all 	// to delete all Pods
+// Here kubernetes self healing comes into action and action and heals it. 
+So to permanently delete it you need to delete the deployment.
+	kubectl delete deployment <deployment-name>
+
+Step 9: Create Deployment (Real Way)
+🧠 Deployment = Manages Pods automatically
+
+	kubectl create deployment web --image=nginx
+Check Deployment
+	kubectl get deployments
+	kubectl get pods
+
+Step 10: Scale Application
+🔹 Scale to 3 Pods
+		kubectl scale deployment web --replicas=3
+		kubectl get pods
+
+Step 11: Scale Down
+		kubectl scale deployment web --replicas=1
+
+Step 12: Self Healing Demo
+		kubectl delete pod <pod-name>
+
+Step 13: Expose Application (Service)
+
+🔹 Create Service
+	kubectl expose deployment web --type=NodePort --port=80
+
+Check Services
+	kubectl get services
+
+Step 14: Access Application in Browser
+	minikube service web
+
+Step 15: Delete Resources (Cleanup)
+🔹 Delete Service
+	kubectl delete service web
+🔹 Delete Deployment
+	kubectl delete deployment web
+
+🛑 Step 16: Stop Cluster
+	minikube stop
+
+❌ Step 17: Delete Cluster Completely
+	minikube delete
+
+Execute command in Pod
+	kubectl exec -it <pod-name> -- /bin/bash  // Access Pod's shell
+	kubectl exec -it <pod-name> -- /bin/sh
+
+View Pod logs
+	kubectl logs <pod-name>
+
+Create Pod from YAML
+	kubectl apply -f <pod-name>.yaml

@@ -1,0 +1,80 @@
+# Multi-node Minikube(Control Plane + Worker Nodes in Minikube)
+
+Reality check: Can Minikube create master–slave?
+-> Default Minikube ❌ 
+-> ONLY ONE NODE (Control Plane + Worker in same VM)
+-> Minikube can simulate master + workers using multiple nodes.
+
+---
+
+Step 1: Delete old cluster (recommended)
+minikube delete
+
+---
+
+Step 2: Start Minikube with multiple nodes (based on your need)
+minikube start --nodes=2
+(or)
+minikube start --nodes=3
+
+---
+
+Step 3: Verify nodes
+kubectl get nodes
+
+You will see something like:
+
+minikube        Ready   control-plane
+minikube-m02    Ready   <none>
+
+✔ minikube → Control Plane
+✔ minikube-m02 → Worker Node
+
+🎉 Master–Worker setup achieved
+
+---
+
+Step 4: Label nodes for clarity (Optional) 
+kubectl label node minikube role=master
+kubectl label node minikube-m02 role=worker
+
+Check:
+
+kubectl get nodes --show-labels
+
+---
+
+// Some theory for understanding
+How scheduling works now (IMPORTANT)
+
+Control Plane runs:
+
+kube-apiserver
+
+scheduler
+
+controller-manager
+
+Worker runs:
+
+kubelet
+
+kube-proxy
+
+Pods
+
+You can verify:
+
+kubectl get pods -n kube-system -o wide
+
+--- 
+
+Extra: Want pods ONLY on worker node? (Advanced but useful)
+Step 1: Taint control plane
+kubectl taint nodes minikube node-role.kubernetes.io/control-plane=:NoSchedule
+
+Step 2: Deploy a pod
+
+Now pods will schedule only on worker node.
+
+---

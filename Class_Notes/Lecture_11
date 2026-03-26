@@ -1,0 +1,40 @@
+Advanced Grifana Dashboards
+
+Dashboards to Build
+-> CPU Usage
+-> Memory Usage
+-> Network Traffic
+-> Pod Health
+-> Node Health
+
+1) CPU Dashboard Query
+```promql
+sum(rate(container_cpu_usage_seconds_total[1m]) by (pod))
+```
+
+2) Memory Dashboard Query
+```promql
+sum(container_memory_usage_bytes) by (pod) / (1024 * 1024)
+```
+
+3) Network Usage
+```promql
+rate(container_networrk_receive_bytes_total[1m])
+```
+
+Grifana Variables 
+
+
+EXAMPLE VARIABLE 
+
+Variable Name: `pod`
+
+Query:
+```promql
+label_value(kube_pod_)
+
+
+```promql
+container_cpu_usage_seconds_total{pod="$pod"}
+```
+

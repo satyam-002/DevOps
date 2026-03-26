@@ -1,0 +1,90 @@
+Replicasets
+
+-> Replicasets ensures a specified number of Pod replicas are running at any given time.
+-> It creates or deletes pods if needed.
+
+
+Deployments
+
+-> It provide declarative updates for Pods and Replicasets with rollback capabilities.
+-> Features:
+    - Rolling updates
+    - Rollback to previous versions
+    - Pause and resume deployments
+    - Version history tracking
+
+
+Deployment Lifecycle
+
+-> Pod lifecycle
+
+    - Pending (Pod is pending until its containers started)
+        |
+    - Running (At least one container is running in the Pod)
+        |
+    - Failed (one or more containers exited with non-zero status) | Succeded (All containers in the POd terminated successfully)
+
+    - Unknown (when state of the Pod cannot be determined)
+
+
+Use of K8s in Industry?
+
+-> Microservices architecture
+-> CI/CD pipelines
+-> Cloud-native applications
+-> High availability systems
+
+// Industry Examples
+
+-> Netflix - streaming services
+-> Amazom - scalable backend services
+-> Airbnb - microservices deployment
+-> EdTech / FinTech / SaaS platforms
+
+
+    Comparing kubeadm, Minikube and Amazom EKS
+_______________________________________________________
+| Feature    | Minikube | Kubeadm         | EKS       |
+| ---------- | -------- | --------------- | --------- |
+| Enviroment | Local    | On-Prem / Cloud | AWS Cloud |    
+| Managed    | NO       | No              | Yes       |
+| Production | NO       | Yes             | Yes       |
+-------------------------------------------------------
+
+
+
+INRODUCTION TO AMAZOM EKS
+
+-> It stands for Elstic K8s services.
+-> It is a "managed K8s service" by AWS.
+
+AWS manages:
+    - Control Panel
+    - Security Patches
+    - High Availability
+
+
+kubeadm vs Minikube
+___________________________________________
+| Feature          | Minikube | Kubeadm   | 
+| ---------------- | -------- | --------- |
+| Learning         | Medium   | Excellent |  
+| Production       | Yes      | No        |
+| Setup Complexity | High     | Low       |
+-------------------------------------------
+
+Kubeadm
+
+-> Tool to create "production-grade Kubernetes clusters".
+-> Used on real servers.
+-> Requires Linux machines.
+
+Namespace
+
+-> Logical isolatioon inside a cluster
+-> Used for multi-team environments
+-> Eg: 
+    - default
+    - kube-system
+    - dev / prod
+

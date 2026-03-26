@@ -1,0 +1,129 @@
+    Kubernetes(K8s)
+
+-> It is an open-source container orchestration platform orignally developed by Google. 
+   It automates the deployment, scaling, and managment of containerized application
+   across clusters of hosts,
+
+    (why K8s?) 
+
+=> without K8s
+
+-> manual container managment
+-> no automatic scaling
+-> Complex networking setup
+-> manual failover and recovery
+-> limited resource optimisation
+
+=> with K8s
+
+-> automated deployment and rollbacks
+-> automatic scaling (horizontal and vertical)
+-> Self-healing capabilities
+-> Service discovery and load balancing
+-> Storage Orchestration
+-> Secret and configuration management
+
+    K8s features:
+
+i) Networking
+    -> Service Discovery
+    -> Load Balancing
+    -> DNS management
+
+ii) Storage
+    -> Storage Classes
+    -> Persistent Volumes
+    -> Dynamic Provisioning
+
+iii) Orchestration
+    -> Pod Scheduling
+    -> Resource Allocation
+    -> Container Management
+
+iv) Scaling 
+    -> Cluster Autoscaling 
+    -> Vertical Pod Autoscaling 
+    -> Horizontal Pod Autoscaling
+
+v) High Availability
+    -> Health checks
+    -> Self healing 
+    -> Auto scaling
+
+    K8s Ecosystem:
+
+-> kubectl: Command-line tool for interacting with clusters
+-> helm: Package manager for k8s
+-> Operators: Extend k8s functionality
+-> Service Mesh: Istio, Linkerd for advanced networking
+-> Monitoring: Prometheus, Grafana for observability
+
+    K8s Architecture:
+
+-> It follows master-slave(control plane-node) architecture.
+
+    Master: 
+
+-> etcd:
+    -> Consistent and highly-available key-value store
+    -> Stores all cluster data including configuration, state, and metadata
+    -> Provides distributed consensus
+    -> Can be restored for disaster recovery
+    -> Critical for cluster state persistence
+-> API server: 
+    -> Centeral management entity and primary entry point for all REST commands.
+    -> Exposes the K8s HTTP API
+    -> Validates and processes API requests
+    -> Serves as the frontend for the control panel
+    -> All components communicate through API server
+-> Scheduler:
+    -> Watches for newly created Pods without assignned nodes
+    -> Selects optimal nodes for each Pod based on:
+        - Resource requiremtns (CPU, memory)
+        - Hadware/software constraints
+        - Affinity and anti-affinity rules
+        - Data locality
+        - Workload interference
+-> Controller Manager:
+    -> Runs controller processes to implement K8s API behaviour
+    -> Includes multiple controllers:
+        - Node Controller: Monitors node health
+        - Replication Controller: Maintains correct number of pods
+        - Endpoints Controller: Populates endpoint obejcts
+        - Service Sccount Controller: Creates default accounts
+-> Cloud Controller Manager(optional):
+    -> Integrates with underlying cloud provider APIs
+    -> Manages cloud-specific controllers:
+        - Node controller(cloud-based)
+        - Route controller
+        - Sercice controller
+
+// Nodes are workers machines that run containerized applications.
+
+    Slave:
+
+-> kubelet:
+    -> Primary node agent running on each worker node
+    -> Communicated with control plane via API server
+    -> Ensures containers are running in Pods 
+    -> Reports nodes and Pod status
+    -> Executes Pod lifecycle actions
+-> kube-proxy:
+    -> Network proxy running on each node
+    -> Maintains network rules for Pod communication
+    -> Implements K8s Service abstraction
+    -> Handles load balancing for services
+    -> Manages iptables/IPVS rules
+-> Container Runtime:
+    -> Software  resposible for running containers
+    -> Supprted runtime:
+        - containerd(most common)
+        - CRI-O
+        - Docker Engine (deprecated but still used)
+-> Pods:
+    -> Pods are the smallest deployable units in K8s. A Pod represents a single instance of
+       a running process and can contain one or more containers.
+    -> Containers in Pod share network namespace (same IP)
+    -> Share storage columes
+    -> co-located and co-scheduled
+    -> Run in a shared context

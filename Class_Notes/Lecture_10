@@ -1,0 +1,180 @@
+What is Grafana?
+
+"Grafana" is an "open-source visualization tool".
+
+Prometheus gives "numbers"...
+Grafana turns them into "charts & dashboards"
+
+
+## ⭐ Grafana Features
+
+-> Beautiful dashboards
+-> Supports Prometheus
+-> Alerts
+-> Real-time graphs
+-> Easy UI
+
+
+## ⚙️ Install Grafana on Minikube
+
+### Step 1: Add Grafana Repo
+
+```cmd
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+```
+
+### Step 2: Install Grafana
+
+```cmd
+helm install grafana grafana/grafana
+```
+
+### Step 3: Get Grafana Admin Password
+
+```powershell
+[System.Text.Encoding]::UTF8.GetString(
+  [System.Convert]::FromBase64String(
+    (kubectl get secret grafana -o jsonpath="{.data.admin-password}")
+  )
+)
+```
+
+📌 **Username:** `admin`
+📌 **Password:** (output of above command)
+
+
+### Step 4: Access Grafana UI
+
+```cmd
+kubectl port-forward svc/grafana 3000:80
+```
+
+Open browser:
+
+```
+http://localhost:3000
+```
+
+## 🔗 Connect Grafana with Prometheus
+
+### Step 1: Login to Grafana
+
+### Step 2: Add Data Source
+
+* Go to **Settings → Data Sources**
+* Click **Add data source**
+* Select **Prometheus**
+
+### Step 3: Set URL
+
+```
+http://prometheus-server
+```
+
+Click **Save \& Test** ✅
+
+\---
+
+## 📈 Build First Dashboard (Cluster Monitoring)
+
+### Step 1: Create Dashboard
+
+* Click **+ → Dashboard**
+* Add new panel
+
+\---
+
+### Step 2: Example CPU Query
+
+```promql
+sum(rate(container_cpu_usage_seconds_total[1m]))
+```
+
+📊 Visualization: Graph
+🕒 Time range: Last 5 minutes
+
+\---
+
+### Step 3: Memory Usage Query
+
+```promql
+sum(container_memory_usage_bytes) / (1024 * 1024)
+```
+
+Displays memory in **MB**
+
+\---
+
+## 🌍 Application Monitoring Example (Nginx)
+
+### Step 1: Deploy Nginx
+
+```cmd
+kubectl create deployment nginx --image=nginx
+kubectl expose deployment nginx --port=80 --type=ClusterIP
+```
+
+
+### Step 2: Verify Pod
+
+```cmd
+kubectl get pods
+```
+
+
+### Step 3: Prometheus Automatically Discovers It 🎯
+
+Grafana can now show:
+
+* Pod CPU
+* Pod memory
+* Restart count
+
+Example Query:
+
+```promql
+kube_pod_container_status_restarts_total
+```
+
+## 📊 Common Useful Metrics for Teaching
+
+|Metric|Purpose|
+|-|-|
+|`up`|Service health|
+|`node_memory_MemAvailable_bytes`|Node memory|
+|`container_cpu_usage_seconds_total`|CPU usage|
+|`kube_pod_status_phase`|Pod state|
+
+
+## 🧹 Cleanup (Optional)
+
+```cmd
+helm uninstall prometheus
+helm uninstall grafana
+kubectl delete deployment nginx
+kubectl delete service nginx
+```
+
+\---
+
+## 🧠 Final Mental Model (Explain to Students)
+
+* **Kubernetes** runs apps
+* **Prometheus** watches Kubernetes
+* **Grafana** shows what Prometheus sees
+
+📌 If something crashes → Prometheus knows
+📌 If CPU is high → Grafana shows graph
+
+
+
+## ✅ Unit IV Completed ✔️
+
+Now we understand:
+
+* Monitoring basics
+* Prometheus architecture
+* Metrics collection
+* Grafana dashboards
+* Real Kubernetes monitoring

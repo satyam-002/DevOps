@@ -1,0 +1,45 @@
+Container Management tools:
+-> Openshift, apache marathon, docker swarm, docker compose 
+
+Containerization:
+-> The process of making a Container.
+
+Container: 
+-> A lightweight virtualisation method that packages an aplication along with its dependencies, libraries, and 
+   configuration files into a single, portable unit called Container.
+-> It shares the host machine's kernel, making them efficient and fast.
+-> Characteristics: Isolation, portability, lightweight, fast setup, standarisation.
+-> virtual machine requires sub-operating system while containers shares machine's kernel.
+-> Benefits: Consistency, resource efficiency, scalability, Devops integration, microservices ready.
+-> In 2026, the landscape is divided into three main categories: Container Engines (creating/running), Orchestrators (managing at scale), and Supporting Tools (security and networking).
+-> Container Engines : Docker, Podman(Daemonless, rootless, pod support, docker compatible), containered, CRI-O.
+    -> Podman commnds eg: podman run -dt -p 8080:80 <image> , podman pull <image>,podman rm <name_or_id>, etc.
+-> Core Docker Components: Docker CLient, Docker Daemon, Docker Images, Docker Containers, Docker Registry.
+-> Common Docker Commands:
+1. Working with Containers (Lifecycle)
+    docker run <image>: It pulls the image (if missing), creates a container, and starts it.
+        -d: Runs in "detached" mode (background).
+        -p 8080:80: Maps host port 8080 to container port 80.
+        --name my-app: Gives your container a custom name.
+    docker ps: Lists all running containers. Use docker ps -a to see all containers, including stopped ones.
+    docker stop <id/name>: Gracefully shuts down a container.
+    docker start <id/name>: Restarts a stopped container.
+    docker exec -it <id/name> bash: Opens an interactive terminal inside a running container. (Use sh if bash isn't available).
+    docker logs -f <id/name>: Views the output/logs of a container in real-time.
+2. Managing Images
+    docker build -t my-image:v1 .: Builds an image from a Dockerfile in the current directory (.) and tags it.
+    docker images: Lists all images currently stored on your machine.
+    docker pull <image>: Downloads an image from Docker Hub without running it.
+    docker push <user/image>: Uploads your local image to a registry like Docker Hub.
+    docker rmi <image-id>: Deletes a specific image from your machine.
+
+3. Storage & Networking
+    docker volume ls: Lists all persistent data volumes.
+    docker volume create <name>: Manually creates a storage area.
+    docker network ls: Lists networks (Bridge, Host, etc.) that containers use to talk to each other.
+    docker inspect <id>: Shows detailed JSON information about a container, including its IP address and mount points.
+
+4. Cleanup & Maintenance
+    docker rm <id>: Removes a specific stopped container.
+    docker system prune: The "nuclear option." It deletes all stopped containers, unused networks, and "dangling" images to free up space.
+    docker stats: Displays a live stream of CPU and memory usage for all running containers.

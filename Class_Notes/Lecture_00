@@ -1,0 +1,31 @@
+INT344 : Enterprise Application Automation
+
+*note(Orchestration --means--> Management)
+
+Att | CA | ETP = TOTAL
+ 5  | 45 |  50 = 100
+
+
+components of master: 
+
+i) API server
+ii) Scheduler
+iii) Controller - Manager
+iv) ETCD
+
+components of worker: 
+
+i) Pod (container)
+ii) Docker
+iii) Kubelet
+iv) Kube-proxy
+
+Commands: kubeadm init(to create cluster)/join(to join from a node) *{creating a cluster with kubeadm}
+
+-> AWS - eks(elastic kubernetics services)
+
+-> Features of kubernetics: Autoscaling, autohealing, load balancing
+
+-> Container Management tools: openshift, apache marathon, docker swarm, docker compose 
+
+-> Monitoring tools: splung, nagios, prometheus, grafana

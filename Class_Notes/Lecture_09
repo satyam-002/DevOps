@@ -1,0 +1,122 @@
+Chapter 04 - Monitoring in Kubernetes using Prometheus and Grafana
+
+Monitoring: 
+- Continuosly checking the health and performance of systems.
+- In Kubernetes, what we check?
+    - Are pods running?
+    - Is CPU or memory high?
+    - Is the application slow?
+    - Did something crash?
+
+
+Real-life example:
+
+- Think of kubernetes as a factory: 
+
+|--------------------|-----------------------|
+|    Kubernetes      |       Real Life       |
+|--------------------|-----------------------|
+|    Pod             |       Machine         |
+|    Node            |       Floor           |
+|    Cluster         |       Electricity     |
+|    Monitoring      |       Control Room    |
+|--------------------|-----------------------|
+
+
+Monitoring in Kubernetes:
+
+Environment
+- In k8s, monitoring tracks:
+    - Pod CPU and memory
+    - Node Health
+    - Application response
+    - Restart counts
+    - Resource usage
+
+Monitoring Stack:
+
+Kubernetes Cluster
+        |
+    Prometheus
+            |
+        Grafana
+
+Prometheus:
+- It is an open-source monitoring and metric collection system.
+- What Prometheus does?
+    - Collects metrics (numbers like Cpu, memory)
+    - Stores them as time-series data
+    - uses pull-based model (it pulls metrics)
+
+
+Prometheus Architecture:
+
+Targets (Pods,Nodes)
+        |
+    Service Discovery
+            |
+        Prometheus Server
+                |
+            Time Series DB
+
+Key Components:
+
+|------------------------|-----------------------------------------------|
+|Component               |       Purpose                                 |          
+|------------------------|-----------------------------------------------|
+|Prometheus Server       |       Collects and Stores metrics             |
+|Service Discovery       |       Finds Kubernetes services automatically |
+|Metrics Endpoint        |       '/metrics' URL                          |
+|TSDB                    |       Time-series database                    |
+|------------------------|-----------------------------------------------|
+
+
+Steps to install and start prometheus:
+
+    minikube start 
+
+    helm version
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+
+    helm install prometheus prometheus-community/prometheus
+    kubectl get pods
+
+    kubectl port-forward svc/prometheus-server 9090:80
+
+Queries and Commands in Prometheus:
+
+Queries:
+
+    ...
+
+    node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes
+    count(node_cpu_seconds_total) by (instance)zz
+    count(kube_pod_info) by (namespace)
+    count(kube_pod_status_phase{phase="Running"})
+    kube_pod_status_phase
+    rate(node_network_receive_bytes_total[1m])
+    (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100
+    rate(node_cpu_seconds_total[1m])
+
+    ...etc
+
+Commands: 
+    
+    ...
+
+    Up
+    node_cpu_seconds_total
+    node_cpu_guest_seconds_total
+    node_boot_time_seconds
+    container_memory_usage_bytes
+
+    ...etc
+    
+
+Clean Up:
+
+helm uninstall prometheus
+helm uninstall grafana
+kubectl delete deployment nginx
+kubectl delete service nginx
