@@ -1,0 +1,92 @@
+UNIT - VI , Automation & Future Trends in Kubernetes Monitoring 
+
+#   Helm: It is a package manager for Kubernetes.
+
+When we run:
+
+```cmd
+helm install prometheus prometheus-community/prometheus
+```
+
+Helm creates: 
+-> Pods
+-> Services
+-> ConfigMaps
+-> Roles
+-> Deployments
+
+Real-Life Analogy
+
+|-------------|-------------------|
+|Comcept      |       Real Life   |          
+|-------------|-------------------|
+|Kubernetes   |       Android Os  |
+|Helm         |                   |
+|Chart        |                   |
+|values.yaml  |                   |
+|-------------|-------------------|
+
+#   Operator: It is a Kubernetes program that "runs inside the cluster" and manages another application " automatically".
+
+"Operator = Smart Controller"
+
+It knows how to: 
+-> install
+-> update
+-> fix
+-> scale
+
+Q) How does Operator Work?
+-> Using "CRDs(Custom Resource Definition)"
+
+# Prometheus Operator Flow
+
+You write Prometheus YAML
+        |
+CRD understands it
+        |
+Operator reads it
+        |
+Operator creates pods, services, configs
+
+# Security has 3 layers:
+
+Authentication -> Authorization -> Encryption
+
+** Authentication (Who are you?)
+-> Login username
+-> Login password
+
+** Authorization (Wht can you do?)
+
+-> Grafana Rules:
+___________________________
+| Role   - Permission      |
+|--------|-----------------|
+| Viewer - View Dashboards |
+| Editor - Edit Dashboards |
+| Admin  - Everything      |
+----------------------------
+
+** TLS / HTTPS 
+-> TLS encrypts communitcation between browser and Grafana 
+
+** Why Backup Dashboard?
+Dashboard:
+-> Took time to build
+-> Represent business logic
+
+If deleted  = loss
+
+** Beginner backup steps: 
+Steps: 
+-> Open grafana
+-> Open dashboard
+-> Export -> JSON
+-> Save file
+
+** Restore Steps:
+-> Open Granfana
+-> Import dashboard
+-> Upload JSON
+-> Dashboard restored
